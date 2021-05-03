@@ -13,17 +13,17 @@ namespace CybersportDataParser.API.Controllers
     [ApiController]
     public class CSGOController : BaseController
     {
-        private readonly ICSGOMatchesParser _cSGOMatchesParser;
-
-        public CSGOController(ICSGOMatchesParser cSGOMatchesParser)
-        {
-            _cSGOMatchesParser = cSGOMatchesParser;
-        }
-
         [HttpGet("matches/live")]
         public async Task<IActionResult> GetLiveMatchesInfo()
         {
             var result = await Mediator.Send(new GetLiveMatchesInfoQuery());
+            return Ok(result);
+        }
+
+        [HttpGet("matches/upcoming")]
+        public async Task<IActionResult> GetUpcommingMatchesInfo()
+        {
+            var result = await Mediator.Send(new GetUpcommingMatchesInfoQuery());
             return Ok(result);
         }
     }

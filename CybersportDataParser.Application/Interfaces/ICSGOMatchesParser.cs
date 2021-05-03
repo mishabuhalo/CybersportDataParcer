@@ -7,5 +7,6 @@ namespace CybersportDataParser.Application.Interfaces
     public interface ICSGOMatchesParser
     {
         Task<List<CSGOLiveMatchesInfo>> GetAllLiveMatchesAsync();
+        Task<List<CSGOUpcomingMatchesInfo>> GetAllUpcomingMatchesAsync();
     }
 }

@@ -56,5 +56,63 @@ namespace CybersportDataParcer.Infrastructure.Services
             _webDriver.Close();
             return result;
         }
+
+        public async Task<List<CSGOUpcomingMatchesInfo>> GetAllUpcomingMatchesAsync()
+        {
+            var result = new List<CSGOUpcomingMatchesInfo>();
+            _webDriver.Navigate().GoToUrl("https://www.hltv.org/matches");
+
+            var upcomingMatchesSections = _webDriver.FindElements(By.ClassName("upcomingMatchesSection"));
+
+            foreach(var upcomingMathcesSection in upcomingMatchesSections)
+            {
+                var upcomingMatchesInfo = new CSGOUpcomingMatchesInfo();
+
+                var matchDate = upcomingMathcesSection.FindElement(By.ClassName("matchDayHeadline"))?.Text;
+
+                upcomingMatchesInfo.MatchesDate = matchDate;
+
+                var upcomingMatches = upcomingMathcesSection.FindElements(By.ClassName("upcomingMatch"));
+
+                foreach(var upcomingMatch in upcomingMatches)
+                {
+                    var newMatch = new CSGOUpcomingMatch();
+
+                    newMatch.MatchTime = upcomingMatch.FindElement(By.ClassName("matchTime"))?.Text;
+                    newMatch.MatchMeta = upcomingMatch.FindElement(By.ClassName("matchMeta"))?.Text;
+                    try
+                    {
+                        newMatch.EventName = upcomingMatch.FindElement(By.ClassName("matchEventName"))?.Text;
+                    }
+                    catch
+                    {
+                        newMatch.EventName = upcomingMatch.FindElement(By.ClassName("matchInfoEmpty"))?.Text;
+                        upcomingMatchesInfo.UpcomingMatches.Add(newMatch);
+                        continue;
+                    }
+
+                    var matchTeams = upcomingMatch.FindElements(By.ClassName("matchTeam"));
+
+                    foreach(var team in matchTeams)
+                    {
+                        string teamName = string.Empty;
+                        try
+                        {
+                            teamName = team.FindElement(By.ClassName("matchTeamName"))?.Text;
+                        }
+                        catch
+                        {
+                            teamName = team.Text;
+                        }
+                        newMatch.Teams.Add(new CSGOShortTeamInfoShort { TeamName = teamName });
+                    }
+                    upcomingMatchesInfo.UpcomingMatches.Add(newMatch);
+                }
+
+                result.Add(upcomingMatchesInfo);
+            }
+            _webDriver.Close();
+            return result;
+        }
     }
 }
