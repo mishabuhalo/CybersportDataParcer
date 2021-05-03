@@ -8,7 +8,7 @@ namespace CybersportDataParser.API
     {
         public static void Main(string[] args)
         {
-            CreateWebHostBuilder(args).Build();
+            CreateWebHostBuilder(args).Build().Run();
         }
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>

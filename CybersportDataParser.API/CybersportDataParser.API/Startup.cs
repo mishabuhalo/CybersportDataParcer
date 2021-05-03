@@ -1,3 +1,6 @@
+using CybersportDataParcer.Infrastructure;
+using CybersportDataParser.Application.CSGOParser.Queries;
+using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -17,8 +20,9 @@ namespace CybersportDataParser.API
 
         public void ConfigureServices(IServiceCollection services)
         {
-
             services.AddControllers();
+            services.AddInfrastructure(Configuration);
+            services.AddMediatR(typeof(GetLiveMatchesInfoQuery).Assembly);
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

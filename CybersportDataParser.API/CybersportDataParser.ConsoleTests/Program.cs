@@ -1,4 +1,6 @@
-﻿using System;
+﻿using OpenQA.Selenium;
+using OpenQA.Selenium.Chrome;
+using System;
 
 namespace CybersportDataParser.ConsoleTests
 {
@@ -6,7 +8,8 @@ namespace CybersportDataParser.ConsoleTests
     {
         static void Main(string[] args)
         {
-
+            IWebDriver webDriver = new ChromeDriver();
+            webDriver.Navigate().GoToUrl("https://www.hltv.org/matches");
         }
     }
 }
