@@ -7,6 +7,7 @@ namespace CybersportDataParser.Application.Models.CSGO
         public string MatchTime { get; set; }
         public string MatchMeta { get; set; }
         public string EventName { get; set; }
+        public string MatchUrl { get; set; }
         public List<CSGOShortTeamInfoShort> Teams { get; set; }
 
         public CSGOUpcomingMatch()

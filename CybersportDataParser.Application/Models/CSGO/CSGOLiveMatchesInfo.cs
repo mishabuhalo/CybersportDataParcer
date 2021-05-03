@@ -7,6 +7,7 @@ namespace CybersportDataParser.Application.Models.CSGO
     {
         [JsonPropertyName("eventName")]
         public string MatchEventName { get; set; }
+        public string MatchUrl { get; set; }
         public string MatchMeta { get; set; }
         [JsonPropertyName("teams")]
         public List<CSGOMatchTeam> CSGOMatchTeams { get; set; }

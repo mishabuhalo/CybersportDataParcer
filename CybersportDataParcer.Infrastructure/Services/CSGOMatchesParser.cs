@@ -3,6 +3,7 @@ using CybersportDataParser.Application.Models.CSGO;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace CybersportDataParcer.Infrastructure.Services
@@ -26,6 +27,10 @@ namespace CybersportDataParcer.Infrastructure.Services
                 CSGOLiveMatchesInfo liveMatchInfo = new CSGOLiveMatchesInfo();
 
                 var matchMeta = liveMatch.FindElement(By.XPath("//div[@class='matchMeta']"))?.Text;
+
+                var matchUrl = liveMatch.FindElements(By.ClassName("match")).First().GetAttribute("href");
+
+                liveMatchInfo.MatchUrl = matchUrl;
 
                 liveMatchInfo.MatchMeta = matchMeta;
 
@@ -80,6 +85,9 @@ namespace CybersportDataParcer.Infrastructure.Services
 
                     newMatch.MatchTime = upcomingMatch.FindElement(By.ClassName("matchTime"))?.Text;
                     newMatch.MatchMeta = upcomingMatch.FindElement(By.ClassName("matchMeta"))?.Text;
+
+                    var matchUrl = upcomingMatch.FindElements(By.ClassName("match")).First().GetAttribute("href");
+                    newMatch.MatchUrl = matchUrl;
                     try
                     {
                         newMatch.EventName = upcomingMatch.FindElement(By.ClassName("matchEventName"))?.Text;
@@ -114,5 +122,7 @@ namespace CybersportDataParcer.Infrastructure.Services
             _webDriver.Close();
             return result;
         }
+
+
     }
 }
