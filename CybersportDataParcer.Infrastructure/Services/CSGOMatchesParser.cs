@@ -4,7 +4,11 @@ using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
+using System.Text.Json;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using System.Web;
 
 namespace CybersportDataParcer.Infrastructure.Services
 {
@@ -162,6 +166,53 @@ namespace CybersportDataParcer.Infrastructure.Services
 
             _webDriver.Close();
 
+            return result;
+        }
+
+        public async Task<List<CSGOMatchLineup>> GetMatchLineupByUrlAsync(string matchUrl)
+        {
+            _webDriver.Navigate().GoToUrl(matchUrl);
+
+            var result = new List<CSGOMatchLineup>();
+
+            var lineupContainer = _webDriver.FindElement(By.ClassName("lineups"));
+
+            var teamNames = lineupContainer.FindElements(By.ClassName("flex-align-center"));
+
+            var firstTeamName = teamNames[1].Text;
+
+            var comparerCotainer = lineupContainer.FindElement(By.ClassName("lineups-compare-container"));
+
+            CSGOMatchLineup firstTeamLineup = new CSGOMatchLineup();
+
+            firstTeamLineup.TeamName = firstTeamName;
+
+            var lineupRegex = @"{""playerId"":[^}]*}";
+
+            var firstTeamLineupData = comparerCotainer.GetAttribute("data-team1-players-data");
+
+            var regex = new Regex(lineupRegex);
+            foreach(Match match in regex.Matches(firstTeamLineupData))
+            {
+                CSGOPlayerInfo cSGOPlayerInfo = JsonSerializer.Deserialize<CSGOPlayerInfo>(match.Value);
+                firstTeamLineup.PlayerInfos.Add(cSGOPlayerInfo);
+            }
+            result.Add(firstTeamLineup);
+
+            var secondTeamName = teamNames[3]?.Text;
+
+            CSGOMatchLineup secondTeamLineup = new CSGOMatchLineup();
+            secondTeamLineup.TeamName = secondTeamName;
+            var secondTeamLineupData = comparerCotainer.GetAttribute("data-team2-players-data");
+            foreach (Match match in regex.Matches(secondTeamLineupData))
+            {
+                CSGOPlayerInfo cSGOPlayerInfo = JsonSerializer.Deserialize<CSGOPlayerInfo>(match.Value);
+                secondTeamLineup.PlayerInfos.Add(cSGOPlayerInfo);
+            }
+
+            result.Add(secondTeamLineup);
+
+            _webDriver.Close();
             return result;
         }
     }
