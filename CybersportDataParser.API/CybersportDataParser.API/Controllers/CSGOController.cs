@@ -40,5 +40,12 @@ namespace CybersportDataParser.API.Controllers
             var result = await Mediator.Send(query);
             return Ok(result);
         }
+
+        [HttpPost("mapStat")]
+        public async Task<IActionResult> GetMatchMapStat(GetMatchMapStatsQuery query)
+        {
+            var result = await Mediator.Send(query);
+            return Ok(result);
+        }
     }
 }

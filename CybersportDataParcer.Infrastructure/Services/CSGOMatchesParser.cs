@@ -4,11 +4,9 @@ using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Text.Json;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using System.Web;
 
 namespace CybersportDataParcer.Infrastructure.Services
 {
@@ -211,6 +209,56 @@ namespace CybersportDataParcer.Infrastructure.Services
             }
 
             result.Add(secondTeamLineup);
+
+            _webDriver.Close();
+            return result;
+        }
+
+        public async Task<List<CSGOMapStatsInfo>> GetMatchMapStatsInfoByUrlAsync(string matchUrl)
+        {
+            _webDriver.Navigate().GoToUrl(matchUrl);
+
+            var result = new List<CSGOMapStatsInfo>();
+
+            var mapStatsContainer = _webDriver.FindElement(By.ClassName("map-stats-infobox"));
+
+            var teams = mapStatsContainer.FindElements(By.ClassName("team"));
+
+            foreach(var team in teams)
+            {
+                result.Add(new CSGOMapStatsInfo()
+                {
+                    TeamName = team?.Text
+                });
+            }
+            var maps = mapStatsContainer.FindElements(By.ClassName("map-stats-infobox-maps"));
+            foreach(var map in maps)
+            {
+                var mapName = map.FindElement(By.ClassName("mapname"))?.Text;
+                var firstTeamMapStatData = map.FindElements(By.ClassName("map-stats-infobox-stats")).First();
+                var secondTeamMapStatData = map.FindElements(By.ClassName("map-stats-infobox-stats")).Last();
+
+                var firstTeamMapStat = new CSGOMapStat()
+                {
+                    MapName = mapName,
+                    Winrate = firstTeamMapStatData.FindElement(By.ClassName("map-stats-infobox-winpercentage"))?.Text,
+                    MapsPlayed = firstTeamMapStatData.FindElement(By.ClassName("map-stats-infobox-maps-played"))?.Text,
+
+                };
+
+                var secondTeamMapStat = new CSGOMapStat()
+                {
+                    MapName = mapName,
+                    Winrate = secondTeamMapStatData.FindElement(By.ClassName("map-stats-infobox-winpercentage"))?.Text,
+                    MapsPlayed = secondTeamMapStatData.FindElement(By.ClassName("map-stats-infobox-maps-played"))?.Text,
+
+                };
+
+                result.First().MapStats.Add(firstTeamMapStat);
+                result.Last().MapStats.Add(secondTeamMapStat);
+            }
+
+
 
             _webDriver.Close();
             return result;
