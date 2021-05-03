@@ -47,5 +47,12 @@ namespace CybersportDataParser.API.Controllers
             var result = await Mediator.Send(query);
             return Ok(result);
         }
+
+        [HttpPost("liveStat")]
+        public async Task<IActionResult> GetMatchLiveStat(GetMatchLiveStatsQuery query)
+        {
+            var result = await Mediator.Send(query);
+            return Ok(result);
+        }
     }
 }

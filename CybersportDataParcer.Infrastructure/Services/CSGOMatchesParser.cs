@@ -125,6 +125,50 @@ namespace CybersportDataParcer.Infrastructure.Services
             return result;
         }
 
+        public async Task<CSGOMatchLiveStats> GetLiveMatchStats(string matchUrl)
+        {
+            _webDriver.Navigate().GoToUrl(matchUrl);
+            var result = new CSGOMatchLiveStats();
+
+            var scoreboard = _webDriver.FindElement(By.ClassName("scoreboard"));
+
+            result.RoundText = scoreboard.FindElement(By.ClassName("round"))?.Text;
+            result.RoundTime = scoreboard.FindElement(By.ClassName("timeText"))?.Text;
+            result.CtScore = scoreboard.FindElement(By.ClassName("ctScore"))?.Text;
+            result.TScore = scoreboard.FindElement(By.ClassName("tScore"))?.Text;
+
+            var teams = scoreboard.FindElements(By.ClassName("team"));
+
+            foreach(var team in teams)
+            {
+                var teamStat = new CSGOTeamLiveStat();
+
+                teamStat.TeamName = team.FindElement(By.ClassName("teamName"))?.Text;
+                var players = team.FindElements(By.ClassName("player"));
+                foreach(var player in players)
+                {
+                    var playerStats = new CSGOPlayerLiveStat();
+                    playerStats.HP = player.FindElement(By.ClassName("hp-text"))?.Text;
+                    playerStats.Money = player.FindElement(By.ClassName("moneyCell"))?.Text;
+                    playerStats.Kills = player.FindElement(By.ClassName("killCell"))?.Text;
+                    playerStats.Assists = player.FindElement(By.ClassName("assistCell"))?.Text;
+                    playerStats.Deaths = player.FindElement(By.ClassName("deathCell"))?.Text;
+                    playerStats.ADR = player.FindElement(By.ClassName("adrCell"))?.Text;
+                    playerStats.Nickname = player.FindElement(By.ClassName("nameCell"))?.Text;
+                    teamStat.PlayerLiveStats.Add(playerStats);
+                }
+
+                result.TeamStats.Add(teamStat);
+            }
+
+            result.TeamStats.First().Side = "CT";
+            result.TeamStats.Last().Side = "T";
+
+
+            _webDriver.Close();
+            return result;
+        }
+
         public async Task<CSGOMatchDetails> GetMatchDetailsByUrlAsync(string matchUrl)
         {
             _webDriver.Navigate().GoToUrl(matchUrl);

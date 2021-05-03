@@ -11,5 +11,6 @@ namespace CybersportDataParser.Application.Interfaces
         Task<CSGOMatchDetails> GetMatchDetailsByUrlAsync(string matchUrl);
         Task<List<CSGOMatchLineup>> GetMatchLineupByUrlAsync(string matchUrl);
         Task<List<CSGOMapStatsInfo>> GetMatchMapStatsInfoByUrlAsync(string matchUrl);
+        Task<CSGOMatchLiveStats> GetLiveMatchStats(string matchUrl);
     }
 }
