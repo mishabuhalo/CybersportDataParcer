@@ -8,5 +8,6 @@ namespace CybersportDataParser.Application.Interfaces
     {
         Task<List<CSGOLiveMatchesInfo>> GetAllLiveMatchesAsync();
         Task<List<CSGOUpcomingMatchesInfo>> GetAllUpcomingMatchesAsync();
+        Task<CSGOMatchDetails> GetMatchDetailsByUrlAsync(string matchUrl);
     }
 }

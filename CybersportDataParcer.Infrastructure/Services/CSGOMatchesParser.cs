@@ -123,6 +123,46 @@ namespace CybersportDataParcer.Infrastructure.Services
             return result;
         }
 
+        public async Task<CSGOMatchDetails> GetMatchDetailsByUrlAsync(string matchUrl)
+        {
+            _webDriver.Navigate().GoToUrl(matchUrl);
 
+            var result = new CSGOMatchDetails();
+
+            var matchPage = _webDriver.FindElement(By.ClassName("match-page"));
+            var timeAndEvent = matchPage.FindElement(By.ClassName("timeAndEvent"));
+            result.EventDate = timeAndEvent.FindElement(By.ClassName("date"))?.Text;
+            result.EventTime = timeAndEvent.FindElement(By.ClassName("time"))?.Text;
+            result.EventName = timeAndEvent.FindElement(By.ClassName("event"))?.Text;
+
+            var teamsBox = matchPage.FindElement(By.ClassName("teamsBox"));
+
+            var teams = teamsBox.FindElements(By.ClassName("team"));
+
+            for(int i = 0; i< teams.Count; i++)
+            {
+                var team = teams[i];
+                var teamDetails = new TeamDetails();
+                teamDetails.TeamName = team.FindElement(By.ClassName("teamName"))?.Text;
+                teamDetails.TeamCountry =  team.FindElements(By.ClassName($"team{i+1}")).First().GetAttribute("title");
+
+                result.Teams.Add(teamDetails);
+            }
+
+            var mapsContainer =  matchPage.FindElement(By.ClassName("maps"));
+
+            result.MatchDetails = mapsContainer.FindElement(By.ClassName("veto-box"))?.Text;
+
+            var maps = mapsContainer.FindElements(By.ClassName("mapname"));
+
+            foreach (var map in maps)
+            {
+                result.Maps.PickedMaps.Add(map?.Text);
+            }
+
+            _webDriver.Close();
+
+            return result;
+        }
     }
 }
