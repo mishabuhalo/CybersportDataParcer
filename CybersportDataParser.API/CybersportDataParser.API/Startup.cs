@@ -1,4 +1,5 @@
 using CybersportDataParcer.Infrastructure;
+using CybersportDataParser.API.Middlewares;
 using CybersportDataParser.Application.CSGOParser.Queries;
 using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -64,6 +65,7 @@ namespace CybersportDataParser.API
                     c.SwaggerEndpoint("/swagger/v1/swagger.json", "Cybersport parser");
                 });
             }
+            app.UseMiddleware<ExceptionMiddleware>();
 
             app.UseRouting();
             app.UseAuthentication();
