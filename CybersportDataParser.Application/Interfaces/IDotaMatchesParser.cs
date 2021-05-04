@@ -7,5 +7,7 @@ namespace CybersportDataParser.Application.Interfaces
     {
         public List<DotaMatchesInfo> GetLiveMatches();
         public List<DotaMatchesInfo> GetUpcomingMatches();
+        public DotaMatchDetails GetMatchDetailsByUrl(string matchUrl);
+        public DotaMatchLiveStat GetMatchLiveStatByUrl(string matchUrl);
     }
 }

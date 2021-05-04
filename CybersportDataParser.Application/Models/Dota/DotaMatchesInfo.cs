@@ -9,5 +9,6 @@ namespace CybersportDataParser.Application.Models.Dota
         public string MatchScore { get; set; }
         public string SecondTeamName { get; set; }
         public string MatchInfo { get; set; }
+        public string MatchUrl { get; set; }
     }
 }
