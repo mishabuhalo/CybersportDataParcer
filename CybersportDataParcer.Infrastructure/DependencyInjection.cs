@@ -11,6 +11,7 @@ namespace CybersportDataParcer.Infrastructure
         public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddTransient<ICSGOMatchesParser, CSGOMatchesParser>();
+            services.AddTransient<IDotaMatchesParser, DotaMatchesParser>();
             return services;
         }
     }
