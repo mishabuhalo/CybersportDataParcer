@@ -7,11 +7,11 @@ using System.Threading.Tasks;
 
 namespace CybersportDataParser.Application.DotaParser.Queries
 {
-    public class GetLiveMatchesInfoQuery: IRequest<List<DotaLiveMatchesInfo>>
+    public class GetLiveMatchesInfoQuery: IRequest<List<DotaMatchesInfo>>
     {
     }
 
-    public class GetLiveMatchesInfoQueryHandler : IRequestHandler<GetLiveMatchesInfoQuery, List<DotaLiveMatchesInfo>>
+    public class GetLiveMatchesInfoQueryHandler : IRequestHandler<GetLiveMatchesInfoQuery, List<DotaMatchesInfo>>
     {
         private readonly IDotaMatchesParser _dotaMatchesParser;
 
@@ -20,7 +20,7 @@ namespace CybersportDataParser.Application.DotaParser.Queries
             _dotaMatchesParser = dotaMatchesParser;
         }
 
-        public async Task<List<DotaLiveMatchesInfo>> Handle(GetLiveMatchesInfoQuery request, CancellationToken cancellationToken)
+        public async Task<List<DotaMatchesInfo>> Handle(GetLiveMatchesInfoQuery request, CancellationToken cancellationToken)
         {
             return _dotaMatchesParser.GetLiveMatches();
         }

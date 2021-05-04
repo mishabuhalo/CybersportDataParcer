@@ -2,7 +2,7 @@
 
 namespace CybersportDataParser.Application.Models.Dota
 {
-    public class DotaLiveMatchesInfo
+    public class DotaMatchesInfo
     {
         public string MatchDate { get; set; }
         public string FirstTeamName { get; set; }

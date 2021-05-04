@@ -5,6 +5,7 @@ namespace CybersportDataParser.Application.Interfaces
 {
     public interface IDotaMatchesParser
     {
-        public List<DotaLiveMatchesInfo> GetLiveMatches();
+        public List<DotaMatchesInfo> GetLiveMatches();
+        public List<DotaMatchesInfo> GetUpcomingMatches();
     }
 }
