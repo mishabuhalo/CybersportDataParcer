@@ -1,10 +1,12 @@
 ﻿using CybersportDataParser.Application.DotaParser.Queries;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
 namespace CybersportDataParser.API.Controllers
 {
     [Route("api/dota")]
+    [Authorize]
     [ApiController]
     public class DotaController : BaseController
     {

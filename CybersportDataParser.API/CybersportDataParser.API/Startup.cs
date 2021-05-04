@@ -1,6 +1,7 @@
 using CybersportDataParcer.Infrastructure;
 using CybersportDataParser.Application.CSGOParser.Queries;
 using MediatR;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -23,6 +24,18 @@ namespace CybersportDataParser.API
             services.AddControllers();
             services.AddInfrastructure(Configuration);
             services.AddMediatR(typeof(GetLiveMatchesInfoQuery).Assembly);
+
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>
+                {
+                    options.Authority = "https://localhost:44339";
+                    options.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
+                    {
+                        //TODO validate audience
+                        ValidateAudience = false
+                    };
+                });
+
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -33,8 +46,9 @@ namespace CybersportDataParser.API
             }
 
             app.UseRouting();
-
+            app.UseAuthentication();
             app.UseAuthorization();
+            app.UseIdentityServer();
 
             app.UseEndpoints(endpoints =>
             {

@@ -1,14 +1,12 @@
 ﻿using CybersportDataParser.Application.LoLParser.Queries;
-using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace CybersportDataParser.API.Controllers
 {
     [Route("api/lol")]
+    [Authorize]
     [ApiController]
     public class LoLController : BaseController
     {
