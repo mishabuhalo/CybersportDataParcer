@@ -12,6 +12,7 @@ namespace CybersportDataParcer.Infrastructure
         {
             services.AddTransient<ICSGOMatchesParser, CSGOMatchesParser>();
             services.AddTransient<IDotaMatchesParser, DotaMatchesParser>();
+            services.AddTransient<ILoLMatchesParser, LoLMatchesParser>();
             return services;
         }
     }
